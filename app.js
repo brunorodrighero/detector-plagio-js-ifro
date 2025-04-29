@@ -44,7 +44,6 @@ async function extractText(file) {
       return result.value || '';
     }
     if (extension === 'doc') {
-      // .doc files are not reliably supported in browsers with mammoth
       throw new Error('Formato .doc não é suportado diretamente. Converta para .docx para análise.');
     }
     if (extension === 'odt') {
@@ -55,6 +54,18 @@ async function extractText(file) {
     if (extension === 'rtf') {
       const text = await file.text();
       return text.replace(/\[^ ]+/g, '').replace(/{[^}]+}/g, '').trim() || '';
+    }
+    if (extension === 'html') {
+      const text = await file.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      // Remove script and style elements
+      doc.querySelectorAll('script, style').forEach(el => el.remove());
+      // Extract text content, preserving code structure
+      let content = doc.body.textContent || '';
+      // Normalize whitespace and remove excessive newlines
+      content = content.replace(/\s+/g, ' ').trim();
+      return content;
     }
     throw new Error(`Formato não suportado: ${extension}`);
   } catch (error) {
@@ -86,7 +97,7 @@ async function startAnalysis() {
   progress.setAttribute('aria-valuenow', 0);
 
   try {
-    const validExtensions = ['txt', 'pdf', 'docx', 'doc', 'rtf', 'odt'];
+    const validExtensions = ['txt', 'pdf', 'docx', 'doc', 'rtf', 'odt', 'html'];
     const files = Array.from(fileInput.files).filter(file =>
       validExtensions.includes(file.name.split('.').pop().toLowerCase())
     );
