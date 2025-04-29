@@ -4,7 +4,7 @@ Este é um detector de plágio baseado na web, projetado para auxiliar professor
 
 ## Funcionalidades
 
-- **Suporte a múltiplos formatos**: Analisa arquivos `.txt`, `.pdf`, `.docx`, `.rtf` e `.odt`.
+- **Suporte a múltiplos formatos**: Analisa arquivos `.txt`, `.pdf`, `.docx`, `.rtf`, `.odt` e `.html`.
 - **Configuração flexível**:
   - **Limiar de similaridade**: Define o percentual mínimo para considerar um par de documentos como potencialmente plagiado.
   - **Tamanho do n-grama**: Permite ajustar a granularidade da análise de texto.
